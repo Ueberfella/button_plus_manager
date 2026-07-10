@@ -50,14 +50,16 @@ class ButtonPlusManagerConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     @staticmethod
     @callback
     def async_get_options_flow(config_entry):
-        return ButtonPlusManagerOptionsFlow(config_entry)
+        return ButtonPlusManagerOptionsFlow()
 
 
 class ButtonPlusManagerOptionsFlow(config_entries.OptionsFlow):
-    """Options-Flow: hier werden Tasten/Schalter per GUI Entities zugeordnet."""
+    """Options-Flow: hier werden Tasten/Schalter per GUI Entities zugeordnet.
 
-    def __init__(self, config_entry: config_entries.ConfigEntry) -> None:
-        self.config_entry = config_entry
+    Hinweis: self.config_entry wird seit HA 2024.12 automatisch von
+    Home Assistant bereitgestellt und darf nicht mehr manuell im
+    __init__ gesetzt werden (führt sonst zu einem 500-Fehler).
+    """
 
     async def async_step_init(self, user_input=None):
         data = self.config_entry.data

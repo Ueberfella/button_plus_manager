@@ -6,18 +6,25 @@ YAML-Bearbeitung für Tasten/Schalter-Zuordnungen nötig.
 
 ## Was macht die Integration?
 
-1. **Einrichtung (Config Flow):** Name des Dashboards + Anzahl Tasten/Relais.
+1. **Einrichtung (Config Flow):** Name, **Geräte-ID** deines Button Plus
+   (findest du in den MQTT-Topics deines Geräts, z. B. `btn_03a45c` aus
+   `buttonplus/btn_03a45c/...`) + Anzahl Tasten/Relais.
 2. **Optionen (Options Flow)** – aufgeteilt in 3 Bereiche über ein Menü:
    - **Schalter/Relais zuordnen:** Entität, Name, Icon je Relais.
-   - **Tasten & Aktionen zuordnen:** Entität (z. B. "zuletzt gedrückt"-Sensor),
-     Name, Icon **und eine Aktion** (beliebiger Service-Aufruf, z. B.
-     "Licht an", "Szene aktivieren", ...), die automatisch ausgeführt wird,
-     sobald die Taste gedrückt wird.
-   - **Display-Zeilen konfigurieren:** 3 Zeilen, je mit einer Quell-Entität,
-     optional einer Vorlage (Template) zur Formatierung und dem
-     MQTT-Topic, an das der Text automatisch gesendet wird (z. B. für die
-     Anzeige "Amsterdam 02:01", "Button+ Likes", "Stichwort" auf dem
-     Display deines Button Plus).
+   - **Tasten & Aktionen zuordnen:** Position (1-8, siehe Geräte-Oberfläche:
+     "1 = oberer Connector links" bis "8 = unterer Connector rechts"),
+     Seite, Event-Typ (`click`/`shortpress`/`longpress`/`release`), Name,
+     Icon **und eine Aktion** (beliebiger Service-Aufruf). Die Integration
+     hört dafür **direkt** das MQTT-Topic
+     `buttonplus/<geräte-id>/button/<position>-<seite>/pushbutton` ab –
+     keine zusätzliche Helfer-Entity in Home Assistant nötig.
+   - **Display-Zeilen konfigurieren:** 3 Zeilen, je mit Display-Item-Index
+     (0, 1, 2, ... – entspricht `buttonplus/<geräte-id>/displayitem/<i>/...`),
+     einer Quell-Entität und optional einer Vorlage (Template) zur
+     Formatierung. Die Integration sendet den Wert automatisch an
+     `buttonplus/<geräte-id>/displayitem/<i>/value/set`, sobald sich die
+     Quell-Entität ändert, und setzt den Zeilennamen einmalig über
+     `.../label/set`.
 3. Bei jeder Änderung wird automatisch die Datei
    `config/dashboards/button_plus_<name>.yaml` neu geschrieben – mit
    Kacheln (Tiles) für alle zugeordneten Schalter und Tasten (Tasten-Kacheln
@@ -26,12 +33,14 @@ YAML-Bearbeitung für Tasten/Schalter-Zuordnungen nötig.
    den (einmaligen) `configuration.yaml`-Schnipsel an, um das Dashboard
    in der Seitenleiste sichtbar zu machen.
 
-### Display-Zeilen: welches MQTT-Topic?
+### Wo finde ich Geräte-ID, Position und Display-Item-Index?
 
-Trag hier das Topic ein, das dein Button Plus Modul für die jeweilige
-Display-Zeile erwartet (siehe Konfigurationsoberfläche deines Geräts oder
-die inoffizielle Doku unter https://balk77.github.io/). Beispiel-Schema:
-`buttonplus/<device>/display/<modul>/<zeile>/text`.
+Öffne die Konfigurationsoberfläche deines Button Plus im Browser
+(die Seite, die du mir als HTML geschickt hast) und klapp die Abschnitte
+**"General MQTT Topics"**, **"Buttons Configuration"** und
+**"Display Configuration"** auf. Dort stehen die exakten Topics, z. B.
+`buttonplus/btn_03a45c/button/2-1/pushbutton` → Geräte-ID `btn_03a45c`,
+Position `2`, Seite `1`.
 
 ## Installation über HACS (empfohlen)
 

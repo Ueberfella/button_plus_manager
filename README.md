@@ -7,14 +7,31 @@ YAML-Bearbeitung für Tasten/Schalter-Zuordnungen nötig.
 ## Was macht die Integration?
 
 1. **Einrichtung (Config Flow):** Name des Dashboards + Anzahl Tasten/Relais.
-2. **Optionen (Options Flow):** Für jede Taste/jeden Schalter wählst du per
-   GUI die passende Entität, einen Anzeigenamen und ein Icon aus.
+2. **Optionen (Options Flow)** – aufgeteilt in 3 Bereiche über ein Menü:
+   - **Schalter/Relais zuordnen:** Entität, Name, Icon je Relais.
+   - **Tasten & Aktionen zuordnen:** Entität (z. B. "zuletzt gedrückt"-Sensor),
+     Name, Icon **und eine Aktion** (beliebiger Service-Aufruf, z. B.
+     "Licht an", "Szene aktivieren", ...), die automatisch ausgeführt wird,
+     sobald die Taste gedrückt wird.
+   - **Display-Zeilen konfigurieren:** 3 Zeilen, je mit einer Quell-Entität,
+     optional einer Vorlage (Template) zur Formatierung und dem
+     MQTT-Topic, an das der Text automatisch gesendet wird (z. B. für die
+     Anzeige "Amsterdam 02:01", "Button+ Likes", "Stichwort" auf dem
+     Display deines Button Plus).
 3. Bei jeder Änderung wird automatisch die Datei
    `config/dashboards/button_plus_<name>.yaml` neu geschrieben – mit
-   Kacheln (Tiles) für alle zugeordneten Schalter und Tasten.
+   Kacheln (Tiles) für alle zugeordneten Schalter und Tasten (Tasten-Kacheln
+   lösen per Klick zusätzlich dieselbe Aktion aus wie der physische Knopf).
 4. Nach dem ersten Setup zeigt Home Assistant dir per Benachrichtigung
    den (einmaligen) `configuration.yaml`-Schnipsel an, um das Dashboard
    in der Seitenleiste sichtbar zu machen.
+
+### Display-Zeilen: welches MQTT-Topic?
+
+Trag hier das Topic ein, das dein Button Plus Modul für die jeweilige
+Display-Zeile erwartet (siehe Konfigurationsoberfläche deines Geräts oder
+die inoffizielle Doku unter https://balk77.github.io/). Beispiel-Schema:
+`buttonplus/<device>/display/<modul>/<zeile>/text`.
 
 ## Installation über HACS (empfohlen)
 

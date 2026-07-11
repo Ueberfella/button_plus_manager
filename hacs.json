@@ -1,7 +1,0 @@
-{
-  "name": "Button Plus Manager",
-  "content_in_root": false,
-  "render_readme": true,
-  "domains": ["button_plus_manager"],
-  "homeassistant": "2024.4.0"
-}

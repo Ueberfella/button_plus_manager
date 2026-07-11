@@ -1,0 +1,5 @@
+regenerate_dashboard:
+  name: Dashboard neu erzeugen
+  description: >
+    Erzeugt die Lovelace-Dashboard-Datei für alle Button Plus Manager
+    Einträge neu, basierend auf den aktuell per GUI gesetzten Zuordnungen.
